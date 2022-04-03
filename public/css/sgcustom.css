@@ -1,0 +1,74 @@
+.search_result {
+    display: none;
+}
+.search_result_table_td_input {
+    display: none;
+}
+/*
+    search by mhtid
+*/
+#search_by_mhtid:active {
+    border-color: #ffc107!important;
+    border: outset;
+}
+#search_by_mhtid:focus {
+    border-color: #ffc107!important;
+    border: outset;
+}
+
+.errorClass {
+    border-color: coral!important;
+    border: solid;
+}
+#loading {
+  position: fixed;
+  /* display: none; */
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  text-align: center;
+  opacity: 0.7;
+  background-color: #fff;
+  z-index: 1051;
+}
+
+#loading-image {
+    position: absolute;
+    /* top: 100px; */
+    /* left: 240px; */
+    z-index: 2000;
+    width:100px;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+}
+
+.addNewPrint:focus {
+    box-shadow:0 0 0 0.2rem #495057;
+    background-color: #ff1200;
+}
+.addNewPrint:hover {
+    box-shadow:0 0 0 0.2rem rgb(238 7 105 / 94%);
+    background-color: #ffbc00;
+}
+.addNewPrint {
+    width: 200px;
+    height: 75px;
+    font-size: 35px;
+}
+#addNewModalForm input {
+    font-weight: 900;
+    /* color: red; */
+    font-size: 20px;
+}
+.printButton:hover {
+    box-shadow:0 0 0 0.2rem rgb(238 7 105 / 94%);
+    background-color: #ffbc00;
+}
+.printButton:focus {
+    box-shadow:0 0 0 0.2rem #495057;
+    background-color: #ff1200;
+}
