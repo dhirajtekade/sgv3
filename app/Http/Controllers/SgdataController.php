@@ -8,6 +8,7 @@ use App\DataTables\MhtdataDataTable;
 use App\Models\Mhtdata;
 use App\Models\Eventdata;
 use DataTables;
+use Picqer;
 
 class SgdataController extends Controller
 {
@@ -15,10 +16,6 @@ class SgdataController extends Controller
     {
         $this->middleware('auth');
     }
-
-    // public function index(MhtdataDataTable $dataTable) {
-
-    // }
 
     public function sglist(Request $request)
     {
@@ -111,5 +108,21 @@ class SgdataController extends Controller
         } else {//hide search result table
             return response()->json('-1',200);
         }
+    }
+
+    public function codetest(Request $request) {
+
+        $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
+        file_put_contents('barcode.png', $generator->getBarcode('123456789', $generator::TYPE_CODABAR));
+
+
+        // $generator = new Picqer\Barcode\BarcodeGeneratorJPG();
+
+        // // file_put_contents('barcode.jpg', $generator->getBarcode('081231723897', $generator::TYPE_CODABAR));
+        // // $generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+        // $generator1 = $generator->getBarcode('0123456789', $generator::TYPE_CODE_128);
+        // dd($generator1);
+        // $generator = new BarcodeGenerator('012345678', BarcodeType::TYPE_CODE_128, BarcodeRender::RENDER_JPG);
+
     }
 }

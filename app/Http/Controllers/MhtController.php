@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Models\Mhtdata;
 use App\Models\Tokenmap;
+use App\Models\Eventdata;
 
 class MhtController extends Controller
 {
@@ -33,11 +34,13 @@ class MhtController extends Controller
         $lname = (isset($requestData['lname'])) ? $requestData['lname'] : '';
         $mht_id = (isset($requestData['mht_id'])) ? $requestData['mht_id'] : '';
 
+        $Eventdata = Eventdata::latest('id')->first();
+
         /**
          * Step 1:getLastTokenNumber
          */
         //1) get last max number token number
-        $getLastTokenNumber = Tokenmap::getLastTokenNumber();
+        $getLastTokenNumber = Tokenmap::getLastTokenNumber($Eventdata);
         if(is_numeric($getLastTokenNumber)) {
             $totenInit = $getLastTokenNumber + 1; //11
         } else {

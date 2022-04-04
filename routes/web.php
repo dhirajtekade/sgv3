@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
 Auth::routes();
+Route::get('codetest',[SgdataController::class, 'codetest'])->name('codetest');
 
 Route::group(['middleware' => ['auth']], function() {
     //home page
