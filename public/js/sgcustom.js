@@ -23,10 +23,11 @@ $(document).on("keyup", '.search_mht_by', function(e) {
         success: function(data) {
             $("#loading").hide();
             console.log(data);
-
-            $(".search_result_table_tr").hide();
-            $(".search_result_table_td_input").hide();
-            $(".search_result_table_td_span").show();
+            //clear previous records
+            $(".not_default_search").remove();
+           // $(".search_result_table_tr").hide();
+            //$(".search_result_table_td_input").hide();
+            //$(".search_result_table_td_span").show();
 
             if(data != '' && data != -1) {
                 //hide default search tr
@@ -34,13 +35,18 @@ $(document).on("keyup", '.search_mht_by', function(e) {
                 //create tr html
                 var trhtml = '';
                 $.each( data, function( key, value ) {
-                    trhtml += '<tr class="search_result_table_tr" id="search_result_table_tr_'+value.id+'">';
+                    trhtml += '<tr class="search_result_table_tr not_default_search" id="search_result_table_tr_'+value.id+'">';
                     trhtml += '<td class="search_result_table_td_mhtid">'+value.mht_id+'</td>';
                     trhtml += '<td class="search_result_table_td_name"><span class="search_result_table_td_span">'+value.name+'</span>';
                     trhtml += '<span class="search_result_table_td_input"><input value="'+value.name+'" type="text" name="name" class="name  w-75" id="name_'+value.id+'" size="10" placeholder="Full Name"></span></td>';
                     trhtml += '<td class="search_result_table_td_alternate_no"><span class="search_result_table_td_span">'+value.alternate_no+'</span>';
                     trhtml += '<span class="search_result_table_td_input"><input value="'+value.alternate_no+'" type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_'+value.id+'" size="10" placeholder="Mobile Number" ></span></td>';
-                    trhtml += '<td><input value="" type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_'+value.id+'" size="5" placeholder="Bags"></td>';
+                    trhtml += '<td><input value="" type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_'+value.id+'" size="5" placeholder="Bags">';
+                    if(value.total_bags > 0){
+                        trhtml += '<span class="mr-2"> +'+value.total_bags+'</span>';
+                    }
+
+                    trhtml += '</td>';
                     // trhtml += '<td><input value="no of luggage if any" type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_0" size="5" placeholder="Bags"></td>';
                     trhtml += '<td>';
                     trhtml += '<button class="printButton btn btn-primary btn-sm mr-2" id="printButton_'+value.id+'" disabled>Print</button>';
@@ -96,6 +102,7 @@ $(document).on("keyup", '.search_mht_by', function(e) {
 
 })
 
+//adding new mht not having mht id yet
 $(document).on("click",".addNewPrint",function(e) {
     e.preventDefault();
     $("#loading").show();
@@ -147,3 +154,14 @@ $(document).on("click",".addNewPrint",function(e) {
     });
 
 });
+
+//
+/**
+ * creating token from mhtids
+ * mhtid can be exist in the system or may not be also
+ * if mhtid exist then add new tokens against him
+ * if mhtid not exists then add new mht entry and assign tokens against him
+ */
+$(document).on("click",".printButton",function(e) {
+    alert('not implementd')
+})

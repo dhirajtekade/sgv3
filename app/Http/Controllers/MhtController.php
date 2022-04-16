@@ -101,7 +101,7 @@ class MhtController extends Controller
         /**
          * Step 3: Add token
          */
-        $addToken = Tokenmap::addToken($sgid,$finalTokenNumberString, $noLuggage);
+        $addToken = Tokenmap::addToken($sgid,$finalTokenNumberString, $noLuggage, $Eventdata);
 
          /**
          * Step 4:getDataForPrint

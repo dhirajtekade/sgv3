@@ -179,6 +179,8 @@
     </div>
 
 </div>
+<script src="{{ asset('js/sgcustom.js') }}" defer></script>
+<script src="{{ asset('js/custom_utility.js') }}" defer></script>
 <script type="text/javascript">
     $("#loading").hide();
         var addNewMht_Url = "{{ route('addNewMht') }}";

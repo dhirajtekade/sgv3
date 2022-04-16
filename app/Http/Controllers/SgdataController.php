@@ -84,23 +84,25 @@ class SgdataController extends Controller
         $any = $request->any;
 
         if($mhtid !='' || $mobile !='' || $any !='') {
-            $searchQuery = Mhtdata::select('id','mht_id', DB::raw('CONCAT_WS(\' \', fname, mname, lname) as name'), 'whatsapp_no', 'alternate_no');
+            $searchQuery = Mhtdata::select('mhtdata.id as id','mhtdata.mht_id as mht_id', DB::raw('CONCAT_WS(\' \', fname, mname, lname) as name'), 'mhtdata.whatsapp_no as whatsapp_no', 'mhtdata.alternate_no as alternate_no',DB::raw('COUNT(token_data.id) as total_bags'))
+                                    ->leftjoin('token_data', 'token_data.fk_mhtdata_id','=','mhtdata.id');
             if($mhtid){
-                $searchQuery = $searchQuery->where('mht_id','like', $mhtid.'%');
+                $searchQuery = $searchQuery->where('mhtdata.mht_id','like', $mhtid.'%');
             }
             if($mobile){
-                $searchQuery = $searchQuery->where('alternate_no','like', $mobile.'%')->orWhere('whatsapp_no', 'like',$mobile.'%');
+                $searchQuery = $searchQuery->where('mhtdata.alternate_no','like', $mobile.'%')->orWhere('mhtdata.whatsapp_no', 'like',$mobile.'%');
             }
             if($any){
-                $searchQuery = $searchQuery->where('mht_id','like', $any.'%')
-                                ->orWhere('fname', 'like',$any.'%')
-                                ->orWhere('mname', 'like',$any.'%')
-                                ->orWhere('lname', 'like',$any.'%')
-                                ->orWhere('alternate_no', 'like',$any.'%')
+                $searchQuery = $searchQuery->where('mhtdata.mht_id','like', $any.'%')
+                                ->orWhere('mhtdata.fname', 'like',$any.'%')
+                                ->orWhere('mhtdata.mname', 'like',$any.'%')
+                                ->orWhere('mhtdata.lname', 'like',$any.'%')
+                                ->orWhere('mhtdata.alternate_no', 'like',$any.'%')
                                 // ->orWhere('center_name', 'like',$any.'%')
                                 // ->orWhere('city', 'like',$any.'%')
-                                ->orWhere('whatsapp_no', 'like',$any.'%');
+                                ->orWhere('mhtdata.whatsapp_no', 'like',$any.'%');
             }
+            $searchResult = $searchQuery->groupBy('id','mht_id', 'fname', 'mname', 'lname','whatsapp_no', 'alternate_no');
             $searchResult = $searchQuery->get();
 
             return response()->json($searchResult,200);
