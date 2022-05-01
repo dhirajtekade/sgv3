@@ -1,25 +1,22 @@
 
  $("#loading").hide();//loader hide initially
 
- //Datatable token table -today's record
- $(function() {
-    // let pusher = new Pusher('a0b5950aa40d7ee5e6d1', {
-    //     cluster: 'ap2',
-    //     encrypted: true,
-    // });
 
-    // let checkouttoastr = pusher.subscribe("checkout-toastr");
+ function DATATABLE_gettoken_result_table() {
+    var table = $("#token_result_table").DataTable(); // Valid initialized DataTable
+    if (table instanceof $.fn.dataTable.Api) {//if had alreday initialized then destroy and make again
+        table.destroy();
+    }
 
-    // checkouttoastr.bind('checkouttoastr', function(data) {
-    //     console.log(data);
-    //     toastr.success("<strong>"+data['data'].user+"</strong> has checkout for token no.: "+data['data'].tokenDeleted);
-    // });
-
-
-    var table = $('#token_result_table').DataTable({
+    var table = $("#token_result_table").DataTable({
         processing: true,
         serverSide: true,
         ajax: sglist_Url,
+        error: function (xhr, error, code)
+            {
+                alert(2);
+                location.reload();
+            },
         columns: [
             {
                 data: 'token_no',
@@ -66,7 +63,35 @@
                 // },
             ]
     });
+ }
 
+ $(document).on("click","#displayTodayRecord",function(e) {
+    if($('#displayTodayRecord:checked').val() == 'on'){
+        $(".token_result").show();
+        DATATABLE_gettoken_result_table();
+    } else {
+        $(".token_result").hide();
+    }
+ })
+
+ //Datatable token table -today's record
+ $(function() {
+    // let pusher = new Pusher('a0b5950aa40d7ee5e6d1', {
+    //     cluster: 'ap2',
+    //     encrypted: true,
+    // });
+
+    // let checkouttoastr = pusher.subscribe("checkout-toastr");
+
+    // checkouttoastr.bind('checkouttoastr', function(data) {
+    //     console.log(data);
+    //     toastr.success("<strong>"+data['data'].user+"</strong> has checkout for token no.: "+data['data'].tokenDeleted);
+    // });
+    if($('#displayTodayRecord:checked').val() == 'on'){
+        $(".token_result").show();
+    } else {
+        $(".token_result").hide();
+    }
     // $(".no_luggage").addClass('numericCheck');
 
 });
@@ -75,6 +100,16 @@
 $(document).on("click",".EditMhtButton",function(e) {
     var id = $(this).attr('id');//EditMhtButton_420
     var searchRecordId = id.replace('EditMhtButton_',''); //420
+
+    //update record if added
+    if($("#search_result_table_tr_"+searchRecordId).find(".search_result_table_td_input").is(':visible')) {
+        //update mhtname and alternate mobile number
+        var mhtname = $("#name_"+searchRecordId).val();
+        var alternate_no = $("#alternate_no_"+searchRecordId).val();
+
+        updateMhtName(searchRecordId, mhtname,alternate_no );
+        //and display new added name
+    }
 
     //hide search_result_table_td_span
     $("#search_result_table_tr_"+searchRecordId).find(".search_result_table_td_span").toggle();
@@ -106,11 +141,11 @@ $(document).on('keyup','.no_luggage',function(e){
     var sr = id.split('_')[1];//indesx
 
     var value = $(this).val();
-    if(value != '') {
+    if($.trim(value) != '') {
         //enable print button
-        $("#printId_"+sr).attr('disabled', false);
+        $("#printButton_"+sr).attr('disabled', false);
     } else {
-        $("#printId_"+sr).attr('disabled', true);
+        $("#printButton_"+sr).attr('disabled', true);
     }
 });
 

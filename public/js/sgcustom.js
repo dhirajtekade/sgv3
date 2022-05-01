@@ -24,26 +24,30 @@ $(document).on("keyup", '.search_mht_by', function(e) {
             $("#loading").hide();
             console.log(data);
             //clear previous records
-            $(".not_default_search").remove();
+            $(".search_result_table_tr").remove();
            // $(".search_result_table_tr").hide();
             //$(".search_result_table_td_input").hide();
             //$(".search_result_table_td_span").show();
-
+            var trhtml = '';
             if(data != '' && data != -1) {
                 //hide default search tr
                 $(".default_new").hide();
                 //create tr html
-                var trhtml = '';
+
                 $.each( data, function( key, value ) {
                     trhtml += '<tr class="search_result_table_tr not_default_search" id="search_result_table_tr_'+value.id+'">';
                     trhtml += '<td class="search_result_table_td_mhtid">'+value.mht_id+'</td>';
-                    trhtml += '<td class="search_result_table_td_name"><span class="search_result_table_td_span">'+value.name+'</span>';
+                    if($.trim(value.name) != ''){
+                        trhtml += '<td class="search_result_table_td_name"><span class="search_result_table_td_span">'+value.name+'</span>';
+                    } else {
+                        trhtml += '<td class="search_result_table_td_name"><span class="search_result_table_td_span"><em>(Click Edit button to update with Mht Name)</em></span>';
+                    }
                     trhtml += '<span class="search_result_table_td_input"><input value="'+value.name+'" type="text" name="name" class="name  w-75" id="name_'+value.id+'" size="10" placeholder="Full Name"></span></td>';
                     trhtml += '<td class="search_result_table_td_alternate_no"><span class="search_result_table_td_span">'+value.alternate_no+'</span>';
                     trhtml += '<span class="search_result_table_td_input"><input value="'+value.alternate_no+'" type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_'+value.id+'" size="10" placeholder="Mobile Number" ></span></td>';
                     trhtml += '<td><input value="" type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_'+value.id+'" size="5" placeholder="Bags">';
                     if(value.total_bags > 0){
-                        trhtml += '<span class="mr-2"> +'+value.total_bags+'</span>';
+                        trhtml += '<span class="mr-2" id="noluggageplus_'+value.id+'"> +'+value.total_bags+'</span>';
                     }
 
                     trhtml += '</td>';
@@ -59,35 +63,26 @@ $(document).on("keyup", '.search_mht_by', function(e) {
 
             } else if(data != -1) {
                 //show default search tr
-                $(".default_new").show();
+                // alert(66)
+               // $(".default_new").show();
+
+               trhtml += '<tr class="default_new search_result_table_tr search_result_table_tr_0">';
+               trhtml += '<td class="search_result_table_td_mhtid">Mhtdvalue</td>';
+               trhtml += '<td><input type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_0" size="10" placeholder="Mobile Number"></td>';
+               trhtml += '<td><input type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_0" size="5" placeholder="Bags"></td>';
+               trhtml += '<td>';
+               trhtml += '<button class="printButton btn btn-primary btn-sm mr-2" id="printButton_0" disabled>Print</button>';
+               trhtml += '</td>';
+               trhtml += '</tr>';
+
+                $(".search_result_table_tbody").append(trhtml);
                 $(".search_result_table_td_mhtid").html(mhtid);
 
                 //still allow to write number and bag
             } else { //hide all search tr
-                $(".search_result_table_tr").hide();
+                $(".search_result_table_tr").remove();
 
             }
-            // if(data.statusCode == 200){
-            //     $(".addNewPrint").attr('disabled', false);
-            //     //close modal
-            //     $("#addNewModal").modal('hide');
-            //     var detail = data.data;
-            //     console.log(detail);
-            //     window.open(
-            //         // generateFinalPrintUrl+'?l='+data.no_luggage+'&t='+data.token_no+'&qr='+data.qr+'&h='+data.have_mobile,
-            //         generateFinalPrintUrl+'?s_id='+detail.s_mht_id+'&l='+detail.no_luggage+'&t='+detail.token_no,
-            //         '_blank' // <- This is what makes it open in a new window.
-            //       );
-            // } else {
-            //     console.log(data);
-            //     if(data.data) {
-            //         $.each( data.data, function( key, value ) {
-            //             alert( key + ": " + value );
-            //            $(".error-message").html(value);
-            //            // $("#"+key).css();
-            //          });
-            //     }
-            // }
         },
         error: function(xhr, textStatus, errorThrown){
             $("#loading").hide();
@@ -95,7 +90,13 @@ $(document).on("keyup", '.search_mht_by', function(e) {
             console.log(xhr);
             console.log(textStatus);
             console.log(errorThrown);
-            alert('Some error occured! Try Reentering data or Reload the page!');
+            var message = xhr.responseJSON.message;
+            if(message == 'Unauthenticated.'){
+                alert('User got logged out. You need to login again.');
+                location.reload();
+            } else {
+                alert('Bhogave Eni Bhul! Some error occured. Try Reentering data or Reload the page!');
+            }
 
          }
     });
@@ -119,7 +120,7 @@ $(document).on("click",".addNewPrint",function(e) {
         success: function(data) {
             $("#loading").hide();
             console.log(data);
-            alert('check console');
+            // alert('check console');
             // if(data.statusCode == 200){
             //     $(".addNewPrint").attr('disabled', false);
             //     //close modal
@@ -127,8 +128,8 @@ $(document).on("click",".addNewPrint",function(e) {
             //     var detail = data.data;
             //     console.log(detail);
             //     window.open(
-            //         // generateFinalPrintUrl+'?l='+data.no_luggage+'&t='+data.token_no+'&qr='+data.qr+'&h='+data.have_mobile,
-            //         generateFinalPrintUrl+'?s_id='+detail.s_mht_id+'&l='+detail.no_luggage+'&t='+detail.token_no,
+            //         // generateFinalPrint_Url+'?l='+data.no_luggage+'&t='+data.token_no+'&qr='+data.qr+'&h='+data.have_mobile,
+            //         generateFinalPrint_Url+'?s_id='+detail.s_mht_id+'&l='+detail.no_luggage+'&t='+detail.token_no,
             //         '_blank' // <- This is what makes it open in a new window.
             //       );
             // } else {
@@ -163,5 +164,131 @@ $(document).on("click",".addNewPrint",function(e) {
  * if mhtid not exists then add new mht entry and assign tokens against him
  */
 $(document).on("click",".printButton",function(e) {
-    alert('not implementd')
+    //basic prior operations
+    e.preventDefault();
+   // $("#loading").show();
+    $(".printButton").attr('disabled', true);
+
+    //get id of clicked printButton record
+    var id = $(this).attr('id');
+    var sr = id.split('_')[1];//indesx
+
+    var mht_id = $("#search_result_table_tr_"+sr).find('.search_result_table_td_mhtid').html();
+    var no_luggage = $("#noluggage_"+sr).val();
+    var alternate_no = $("#alternate_no_"+sr).val();
+
+    $.ajax({
+        url: addNewMht_Url,
+        type: 'post',
+        dataType: 'json',
+        data: {
+            mht_id:mht_id,
+            no_luggage:no_luggage,
+            alternate_no:alternate_no
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
+            $("#loading").hide();
+            console.log(data);
+            // alert('check console');
+            if(data.statusCode == 200){
+                $(".addNewPrint").attr('disabled', false);
+                //close modal
+                $("#addNewModal").modal('hide');
+                var detail = data.data;
+                console.log(detail);
+                window.open(
+                    // generateFinalPrint_Url+'?l='+data.no_luggage+'&t='+data.token_no+'&qr='+data.qr+'&h='+data.have_mobile,
+                    generateFinalPrint_Url+'?s_id='+detail.mht_id+'&l='+detail.no_luggage+'&t='+detail.token_no+'&b='+detail.bags_no,
+                    '_blank' // <- This is what makes it open in a new window.
+                  );
+            } else {
+                console.log(data);
+                if(data.data) {
+                    $.each( data.data, function( key, value ) {
+                        alert( key + ": " + value );
+                       $(".error-message").html(value);
+                       // $("#"+key).css();
+                     });
+                }
+            }
+        },
+        error: function(xhr, textStatus, errorThrown){
+            $("#loading").hide();
+            $(".printButton").attr('disabled', false);
+            console.log(xhr);
+            console.log(textStatus);
+            console.log(errorThrown);
+            alert('Some error occured! Try Reentering data or Reload the page!');
+
+         }
+    });
 })
+
+
+
+$(document).on('click','.checkoutButton',function(e){
+    //get id of clicked printButton record
+    var id = $(this).attr('id');
+    var sr = id.split('_')[1];//indesx
+    $("#loading").show();
+    $.ajax({
+        url: checkout_Url,
+        type: 'post',
+        dataType: 'json',
+        data:{'id':sr},
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        success: function(data) {
+            //disable the checkout button
+            $("#noluggageplus_"+sr).html('');
+            $("#loading").hide();
+            $("#noluggage_"+sr).val();
+            // $("#"+id).hide();
+            // $("#tokenno_"+sr).html('');
+            // $("#partialcheckoutId_"+sr).hide();
+            //remove token ids,
+            // console.log('checkoutButton='+newToken);
+            // $("#tokenno_"+sr).hide();// TODO - need to do from pusher now
+
+            //TODO - should we delete the QR code image or keep.
+            //TODO - or we can delete them in flush cron
+        }
+    });
+})
+/**
+ * update mhtname and alternate_no if edit is done on him
+ */
+function updateMhtName(searchRecordId, mhtname,alternate_no ) {
+    $.ajax({
+        url: updateMht_Url,
+        type: 'post',
+        dataType: 'json',
+        data: {
+            mhtid:searchRecordId,
+            mhtname:mhtname,
+            alternate_no:alternate_no
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function(data) {
+            // $("#loading").hide();
+            console.log(data);
+            $("#search_result_table_tr_"+searchRecordId).find('.search_result_table_td_name').find('.search_result_table_td_span').html(data.data.name);
+            $("#search_result_table_tr_"+searchRecordId).find('.search_result_table_td_alternate_no').find('.search_result_table_td_span').html(data.data.alternate_no);
+            $("#name_"+searchRecordId).val(data.data.name);
+            $("#alternate_no_"+searchRecordId).val(data.data.alternate_no);
+        },
+        error: function(xhr, textStatus, errorThrown){
+            $("#loading").hide();
+            $(".printButton").attr('disabled', false);
+            console.log(xhr);
+            console.log(textStatus);
+            console.log(errorThrown);
+            alert('Edit Mht!');
+
+         }
+    });
+}

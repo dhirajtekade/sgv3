@@ -74,3 +74,10 @@
     box-shadow:0 0 0 0.2rem #495057;
     background-color: #ff1200;
 }
+
+.top_floor {
+    background: darkgray;
+}
+.today_total_status span {
+    float:right;
+}

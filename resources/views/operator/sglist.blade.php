@@ -3,11 +3,11 @@
 @section('content')
 
 <div class="container">
-    <div class="row">
-        <div class="col-2">
-            <button class="btn btn-warning mr-2" data-toggle="modal" id="openaddNewModal" ><i class="fa fa-solid fa-plus"></i> Add Person</button>
-            {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" >Open modal for @mdo</button> --}}
-        </div>
+    <div class="top_floor border border-secondary">
+    <div class="row px-3 m-2">
+        {{-- <div class="col-2">
+            <button class="btn btn-warning mr-2" data-toggle="modal" id="openaddNewModal" ><i class="fa fa-solid fa-plus"></i> Add as a Mht</button>
+        </div> --}}
         <div class="col-2 mr-2">
             <input type="text" id="search_by_any" class="search_mht_by" placeholder=" Search by Any" value="">
         </div>
@@ -17,10 +17,20 @@
         <div class="col-2">
             <input type="text" id="search_by_mhtid" class="search_mht_by" placeholder=" Search by Mhtid" value="" autofocus>
         </div>
+
+
+        <div class="col-6 group today_total_status">
+            @if(isset($getTodayStatusData) && count($getTodayStatusData) > 0)
+            <span class="total_bags_checkout "> Total checkout: <span class="total_bags_checkout_html font-weight-bold text-primary">{{$getTodayStatusData['total_bags_checkout']}}</span></span>
+            <span class="total_bags_checkin"> Bags remain:  <span class="total_bags_checkin_html font-weight-bold text-primary">{{$getTodayStatusData['total_bags_checkin']}},</span></span>
+            <span class="total_bags_count "> Total checkin:  <span class="total_bags_count_html font-weight-bold text-primary">{{$getTodayStatusData['total_bags_count']}},</span></span>
+            @endif
+        </div>
     </div>
 
 
-    <div class="row mt-2">
+
+    <div class="row mt-2 px-3">
         <!-- this table will be display only when search is in progress or done after its action perform we can hide it-->
         <div class="col search_result">
             {{-- <h2>Search Result</h2> --}}
@@ -35,12 +45,12 @@
                     </tr>
                 </thead> --}}
                 <tbody class="search_result_table_tbody">
-                    <tr class="default_new search_result_table_tr">
+                    <tr class="default_new search_result_table_tr search_result_table_tr_0">
                         <td class="search_result_table_td_mhtid">Mhtdvalue</td>
                         <td><input type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_0" size="10" placeholder="Mobile Number"></td>
                         <td><input type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_0" size="5" placeholder="Bags"></td>
                         <td>
-                            <button class="printButton btn btn-primary btn-sm mr-2" id="printId_0" disabled>Print</button>
+                            <button class="printButton btn btn-primary btn-sm mr-2" id="printButton_0" disabled>Print</button>
                             {{-- <a  class="checkoutButton btn btn-success btn-sm mr-2" id="checkoutId_0" disabled>Checkout</a> --}}
                             {{-- <button class="editButton btn btn-info btn-sm" id="editId_" disabled>Edit</button> --}}
                             {{-- <a href="" class="sendMsgButton btn btn-info btn-sm mr-2" id="sendId_" style="display:none;">Send Msg</a> --}}
@@ -52,9 +62,13 @@
             </table>
         </div>
     </div>
+    </div>
 
-    <h2>Today's Record</h2>
-    <div class="row mt-2">
+    <br>
+    <hr>
+    <div class="second_floor">
+    <h2 class="token_result">Today's Record</h2>
+    <div class="row mt-2 ">
         <div class="col token_result">
             <table class="table table-bordered data-table" id="token_result_table">
                 <thead>
@@ -71,6 +85,7 @@
 
             </table>
         </div>
+    </div>
     </div>
 
 
@@ -184,8 +199,12 @@
 <script type="text/javascript">
     $("#loading").hide();
         var addNewMht_Url = "{{ route('addNewMht') }}";
+        var updateMht_Url = "{{ route('updateMht') }}";
         var sglist_Url = "{{ route('sglist') }}";
         var searchResult_Url = "{{ route('searchResult') }}";
+        var checkout_Url = "{{ route('checkout') }}";
+        // var checkout_Url = "{{ route('checkout') }}";
+        var generateFinalPrint_Url = "{{ route('generateFinalPrint') }}";
 
     </script>
 

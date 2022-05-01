@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Log;
 use Validator;
 use App\Models\Mhtdata;
 use App\Models\Tokenmap;
@@ -37,7 +38,7 @@ class MhtController extends Controller
         $Eventdata = Eventdata::latest('id')->first();
 
         /**
-         * Step 1:getLastTokenNumber
+         * Step 1:getLastTokenNumber and bagNumber
          */
         //1) get last max number token number
         $getLastTokenNumber = Tokenmap::getLastTokenNumber($Eventdata);
@@ -54,6 +55,7 @@ class MhtController extends Controller
         }
         $finalTokenNumberString = rtrim($tokenNumbers, ',');
 
+
         /**
          * Step 2: Update Mhtdata
          */
@@ -62,16 +64,13 @@ class MhtController extends Controller
             $IsMhtidExist = Mhtdata::where('mht_id',$request->mht_id )->orderBy('id','desc')->first();
             if(isset($IsMhtidExist->id)){
                 $sgid = $IsMhtidExist->id;
-                //update new data if entered in the form
-                dd($requestData);
-                $tokenSave = Mhtdata::where('id', $sgid)
-                    ->update([
-                        'alternate_no' => $alternate_no,
-                        'center_name' => $center_name,
-                        'fname' => $fname,
-                        'mname' => $mname,
-                        'lname' => $lname,
-                    ]);
+                $mhtSave = Mhtdata::find($sgid);
+                if($alternate_no){ $mhtSave->alternate_no = $alternate_no;}
+                if($center_name){ $mhtSave->center_name = $center_name;}
+                if($fname){ $mhtSave->fname = $fname;}
+                if($mname){ $mhtSave->mname = $mname;}
+                if($lname){ $mhtSave->lname = $lname;}
+                $mhtSave->save();
                 // $finalTokenNumberString = $IsMhtidExist->token_no.",".$finalTokenNumberString;
             } else {
                 //if not exist add new record
@@ -97,11 +96,19 @@ class MhtController extends Controller
                 }
             }
 
+        // 3) from step 1
+        $next_bag_count = Tokenmap::getLastBagNumber($Eventdata, $sgid);
+        $bagNumbers = '';
+        for($i=0; $i< $noLuggage; $i++) {
+            $bagNumbers .= ($next_bag_count + $i).',';
+        }
+        $bagsNumberString = rtrim($bagNumbers, ',');
+
 
         /**
          * Step 3: Add token
          */
-        $addToken = Tokenmap::addToken($sgid,$finalTokenNumberString, $noLuggage, $Eventdata);
+        $addToken = Tokenmap::addToken($sgid,$finalTokenNumberString, $noLuggage, $Eventdata, $next_bag_count);
 
          /**
          * Step 4:getDataForPrint
@@ -114,7 +121,57 @@ class MhtController extends Controller
 
         $data['token_no'] = $finalTokenNumberString;
         $data['no_luggage'] = count(explode(',',$finalTokenNumberString));
+        $data['bags_no'] = explode(',',$bagsNumberString);
 
+        if(count( $data['bags_no']) != $data['no_luggage']){
+            //TODO - add log error details in log file
+            Log::info('Log message', array('context' => 'Bag and token count mismatch!','data'=>"sgid=$sgid, bagsNumberString=$bagsNumberString, finalTokenNumberString=$finalTokenNumberString, noLuggage=$noLuggage "));
+            return response()
+            ->json(['statusCode' => 400, 'error' => 'Error: Bag and token count mismatch!']);
+        }
+
+        return response()
+        ->json(['statusCode' => 200, 'data' => $data]);
+    }
+
+    public function updateMht(Request $request)
+    {
+        /* validations check */
+        $validator = Validator::make($request->all(), [
+            'mhtid' => 'required',
+            // 'order_status_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()
+                ->json(['statusCode' => 429, 'data' => $validator->errors()]);
+        }
+
+        // $mhtid = $request->mhtid;
+        $mhtnameArr = (isset($request->mhtname)) ? explode(' ',$request->mhtname) : [];
+         if(count($mhtnameArr) > 0) {
+            $lname = end($mhtnameArr);
+            $fname = array_slice($mhtnameArr, 0, count($mhtnameArr)-2);
+            $mname = array_slice($mhtnameArr, -2, 1);
+         }
+        $alternate_no = (isset($request->alternate_no)) ? $request->alternate_no : '';
+
+        $IsMhtidExist = Mhtdata::where('mht_id',$request->mht_id )->orderBy('id','desc')->first();
+
+        if(isset($IsMhtidExist->id)){
+            $sgid = $IsMhtidExist->id;
+            $mhtUpdate = Mhtdata::find($sgid);
+            if($alternate_no){ $mhtUpdate->alternate_no = $alternate_no;}
+            if($fname){ $mhtUpdate->fname = $fname;}
+            if($mname){ $mhtUpdate->mname = $mname;}
+            if($lname){ $mhtUpdate->lname = $lname;}
+            $mhtUpdate->save();
+        }
+
+        $data = [
+            'name' => $request->mhtname,
+            'alternate_no' =>  $request->alternate_no
+        ];
         return response()
         ->json(['statusCode' => 200, 'data' => $data]);
     }

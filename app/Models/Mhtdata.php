@@ -31,8 +31,8 @@ class Mhtdata extends Model
 
         $mhtdataJoin = Mhtdata::join('token_data', 'token_data.fk_mhtdata_id','=','mhtdata.id')
                                 ->where('mhtdata.id', $sgid)
+                                // ->orderBy('token_data.id','desc')
                                 ->get();
-
 
         if(isset($mhtdataJoin[0])) {
             $data['no_luggage'] = count($mhtdataJoin);

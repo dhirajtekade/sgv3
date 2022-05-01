@@ -24,6 +24,11 @@ class Eventdata extends Model
     public static function getlatestEventId() {
         $curerntEventId = Eventdata::all()->last()->id;
         return $curerntEventId;
-
     }
+
+    public static function getlatestEventData() {
+        $curerntEventId = Eventdata::latest()->first();
+        return $curerntEventId;
+    }
+
 }
