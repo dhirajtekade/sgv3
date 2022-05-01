@@ -81,3 +81,12 @@
 .today_total_status span {
     float:right;
 }
+.btn {
+    margin-top: 2px;
+}
+.search_mht_by{
+    border-radius: 5px;
+}
+.import_format {
+    font-size: xx-small;
+}

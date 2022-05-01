@@ -12,6 +12,5 @@
 <script src="{{ asset('js/scanner.js') }}" defer></script>
 <script>
     var partialcheckout_Url = "{{ route('partialcheckout') }}";
-
 </script>
 @endsection

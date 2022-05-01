@@ -31,4 +31,9 @@ class Eventdata extends Model
         return $curerntEventId;
     }
 
+    public static function getEventById($event_id) {
+        $eventInfo = Eventdata::find($event_id);
+        return $eventInfo;
+    }
+
 }

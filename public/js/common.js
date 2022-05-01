@@ -8,3 +8,4 @@ $(document).on("click","#displayTodayRecord",function(e) {
         $(".token_result").hide();
     }
 })
+

@@ -27,7 +27,11 @@ class SettingController extends Controller
 
     public function eveninfo(){
         $eventinfo = Eventdata::getlatestEventData();
-        return view('admin.eventinfo_form', compact('eventinfo'));
+        $todaydate = date("Y-m-d");
+        $todaymonth = date("F");
+        $todayyear = date('Y');
+        // dd($todaymonth, date("M", strtotime('2016-01-17 16:41:51')));
+        return view('admin.eventinfo_form', compact('eventinfo','todaydate', 'todaymonth', 'todayyear'));
     }
 
     public function store_eveninfo(Request $request) {
@@ -37,6 +41,8 @@ class SettingController extends Controller
         $settingUpdate->department =$requestAll['department'];
         $settingUpdate->event_name =$requestAll['event_name'];
         $settingUpdate->month =$requestAll['month'];
+        $settingUpdate->event_start_date =$requestAll['event_start_date'];
+        $settingUpdate->event_end_date =$requestAll['event_end_date'];
         $settingUpdate->year =$requestAll['year'];
         $settingUpdate->event_location =$requestAll['event_location'];
         $settingUpdate->save();

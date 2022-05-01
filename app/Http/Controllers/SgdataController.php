@@ -149,7 +149,7 @@ class SgdataController extends Controller
         file_put_contents('barcode4.png', $generator->getBarcode('123456789', $generator::TYPE_IMB));
         file_put_contents('barcode5.png', $generator->getBarcode('123456789', $generator::TYPE_CODE_11));
         file_put_contents('barcode6.png', $generator->getBarcode('123456789', $generator::TYPE_PHARMA_CODE));
-        file_put_contents('barcode7.png', $generator->getBarcode('123456789', $generator::TYPE_PHARMA_CODE_TWO_TRACKS));
+        file_put_contents('barcode7.png', $generator->getBarcode('123456789', $generator::TYPE_CODE_128));
 
 
         // $generator = new Picqer\Barcode\BarcodeGeneratorJPG();

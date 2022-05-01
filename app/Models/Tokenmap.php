@@ -101,7 +101,7 @@ class Tokenmap extends Model
             // file_put_contents('barcode.png', $generator->getBarcode('123456789', $generator::TYPE_CODABAR));
 
             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
-            file_put_contents("images/".$thisBagToken.".png", $generator->getBarcode($barcodeValue, $generator::TYPE_CODABAR));
+            file_put_contents("images/".$thisBagToken.".png", $generator->getBarcode($barcodeValue, $generator::TYPE_CODE_128));
 
 
             $TokenData = new Tokenmap();

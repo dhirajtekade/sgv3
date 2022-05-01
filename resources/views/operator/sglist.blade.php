@@ -21,9 +21,9 @@
 
         <div class="col-6 group today_total_status">
             @if(isset($getTodayStatusData) && count($getTodayStatusData) > 0)
-            <span class="total_bags_checkout "> Total checkout: <span class="total_bags_checkout_html font-weight-bold text-primary">{{$getTodayStatusData['total_bags_checkout']}}</span></span>
-            <span class="total_bags_checkin"> Bags remain:  <span class="total_bags_checkin_html font-weight-bold text-primary">{{$getTodayStatusData['total_bags_checkin']}},</span></span>
-            <span class="total_bags_count "> Total checkin:  <span class="total_bags_count_html font-weight-bold text-primary">{{$getTodayStatusData['total_bags_count']}},</span></span>
+            <span class="total_bags_checkout ">, Total checkout: <span class="total_bags_checkout_html font-weight-bold text-primary">{{$getTodayStatusData['total_bags_checkout']}}</span></span>
+            <span class="total_bags_checkin">, Bags remain:  <span class="total_bags_checkin_html font-weight-bold text-primary">{{$getTodayStatusData['total_bags_checkin']}}</span></span>
+            <span class="total_bags_count "> Total checkin:  <span class="total_bags_count_html font-weight-bold text-primary">{{$getTodayStatusData['total_bags_count']}}</span></span>
             @endif
         </div>
     </div>

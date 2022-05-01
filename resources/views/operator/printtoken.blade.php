@@ -54,9 +54,9 @@
         .EventDetails {
             text-align: initial;
         }
-        .barcode_img {
+        /* .barcode_img {
             width: 80%;
-        }
+        } */
     </style>
 
 </head>
@@ -77,7 +77,7 @@ $bagExplode = explode(',', $data['b']);
         for($i = 0 ; $i < $data['l'] ; $i++) {
             ?>
         <div style='page-break-after: always'>
-            <table id="qr" width="250">
+            <table id="qr" width="350">
                 <thead>
                 <tr>
                     <th></th>
@@ -85,12 +85,12 @@ $bagExplode = explode(',', $data['b']);
                 </thead>
                 <tbody>
                 <tr>
-                    <td>
-                        <img src="{{asset('images/'.$tokenExplode[$i].'.png')}}" >
+                    <td class="pt-2">
+                        <img src="{{asset('images/'.$tokenExplode[$i].'.png')}}" width="90%" >
                         <br>
                         <span >{{$data['s_id']}}
-                            {{ ($setttingVars->show_token_number == 'both') ? "/ ".$tokenExplode[$i] : ''}}
-                            {{ ($setttingVars->show_bag_number == 'yes') ? "/ ".$bagExplode[$i] : ''}}
+                            {{ ($setttingVars->show_token_number == 'both') ? "/ t:".$tokenExplode[$i] : ''}}
+                            {{ ($setttingVars->show_bag_number == 'yes') ? "/ b:".$bagExplode[$i] : ''}}
 
                         </span>
                     </td>
@@ -105,7 +105,7 @@ $bagExplode = explode(',', $data['b']);
 
     @for($i = 0 ; $i < $data['l'] ; $i++)
         <div class="" style='page-break-after: always'>
-            <table id="qr" width="250" class="mt-2 mr-2 ml-2">
+            <table id="qr" width="350" class="mt-2 mr-2 ml-2">
             <thead>
                 <tr>
                     <th></th>
@@ -124,9 +124,13 @@ $bagExplode = explode(',', $data['b']);
                 </tr>
                 <tr>
                     <td>
-                        <div class="row text-center">
-                            <img src="{{asset('images/'.$tokenExplode[$i].'.png')}}"  class="px-4 ">
-                            <span >{{$data['s_id']}}</span>
+                        <div class="text-center">
+                            <img src="{{asset('images/'.$tokenExplode[$i].'.png')}}"  class="px-4 " width="60%">
+                            <br>
+                            <span >
+                                {{$data['s_id']}}
+                                {{ ($setttingVars->show_bag_number == 'yes') ? "/ ".$bagExplode[$i] : ''}}
+                            </span>
                         </div>
                     </td>
                     {{-- <td>

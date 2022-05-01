@@ -50,14 +50,14 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('setting_form') }}">Settings</a>
                         </li>
-                        <li class="nav-item">
+                        {{-- <li class="nav-item">
                             <a class="nav-link" href="#">Attendace</a>
-                        </li>
+                        </li> --}}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('eveninfo') }}" >Event Info</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Reports</a>
+                            <a class="nav-link" href="{{ route('report_page') }}">Reports</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

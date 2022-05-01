@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MhtController;
+use App\Http\Controllers\RerportController;
 use App\Http\Controllers\SgdataController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
@@ -51,7 +52,10 @@ Route::group(['middleware' => ['auth']], function() {
 
 
     //report
-    //Route::get('/report', [MhtdataController::class, 'report']);
+    Route::get('/report_page', [RerportController::class, 'report_page'])->name('report_page');
+    Route::post('/mhtdata_import', [RerportController::class, 'mhtdata_import'])->name('mhtdata_import');
+    Route::post('/export_excel', [RerportController::class, 'exportIntoExcel'])->name('export_excel');
+    Route::post('/export_report', [RerportController::class, 'export_report'])->name('export_report');
 
 
 

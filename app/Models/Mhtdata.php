@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Mhtdata extends Model
 {
@@ -28,7 +29,6 @@ class Mhtdata extends Model
                         ];
 
     public static function getDataForPrint($sgid) {
-
         $mhtdataJoin = Mhtdata::join('token_data', 'token_data.fk_mhtdata_id','=','mhtdata.id')
                                 ->where('mhtdata.id', $sgid)
                                 // ->orderBy('token_data.id','desc')
@@ -49,6 +49,22 @@ class Mhtdata extends Model
         }
 
         return $data;
+    }
+
+    public static function getMhtData() {
+        $records = DB::table('mhtdata')
+                            ->select(
+                                'mht_id',
+                                'fname',
+                                'mname',
+                                'lname',
+                                'whatsapp_no',
+                                'alternate_no',
+                                'center_name',
+                                'city')
+                            ->get()->toArray();
+                       //     dd($records);
+        return $records;
     }
 
 }
