@@ -20,6 +20,8 @@ class MhtController extends Controller
             // 'order_status_id' => 'required',
         ]);
 
+        // dd($request->all());
+
         if ($validator->fails()) {
             return response()
                 ->json(['statusCode' => 429, 'data' => $validator->errors()]);

@@ -45,7 +45,7 @@
                     </tr>
                 </thead> --}}
                 <tbody class="search_result_table_tbody">
-                    <tr class="default_new search_result_table_tr search_result_table_tr_0">
+                    <tr class="default_new search_result_table_tr " id="search_result_table_tr_0">
                         <td class="search_result_table_td_mhtid">Mhtdvalue</td>
                         <td><input type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_0" size="10" placeholder="Mobile Number"></td>
                         <td><input type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_0" size="5" placeholder="Bags"></td>

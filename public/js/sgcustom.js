@@ -22,7 +22,7 @@ $(document).on("keyup", '.search_mht_by', function(e) {
         },
         success: function(data) {
             $("#loading").hide();
-            console.log(data);
+            // console.log(data);
             //clear previous records
             $(".search_result_table_tr").remove();
            // $(".search_result_table_tr").hide();
@@ -66,7 +66,7 @@ $(document).on("keyup", '.search_mht_by', function(e) {
                 // alert(66)
                // $(".default_new").show();
 
-               trhtml += '<tr class="default_new search_result_table_tr search_result_table_tr_0">';
+               trhtml += '<tr class="default_new search_result_table_tr" id="search_result_table_tr_0">';
                trhtml += '<td class="search_result_table_td_mhtid">Mhtdvalue</td>';
                trhtml += '<td><input type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_0" size="10" placeholder="Mobile Number"></td>';
                trhtml += '<td><input type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_0" size="5" placeholder="Bags"></td>';
@@ -173,7 +173,10 @@ $(document).on("click",".printButton",function(e) {
     var id = $(this).attr('id');
     var sr = id.split('_')[1];//indesx
 
+    // search_result_table_tr_1
+
     var mht_id = $("#search_result_table_tr_"+sr).find('.search_result_table_td_mhtid').html();
+
     var no_luggage = $("#noluggage_"+sr).val();
     var alternate_no = $("#alternate_no_"+sr).val();
 

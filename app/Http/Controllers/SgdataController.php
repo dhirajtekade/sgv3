@@ -181,7 +181,16 @@ class SgdataController extends Controller
      * for special access to scan and all token checkout in one go. scan one and checkout all
      */
     public function checkoutallinone(Request $request) {
-
+        $mhtid = $request->mhtid;
+        $sgid = Mhtdata::where('mht_id', $mhtid)->value('id');
+        Tokenmap::where('fk_mhtdata_id',$sgid)->delete();
+        // return response()->json("Checkout all done for mhtid = $mhtid",200);
+        $data = [
+            'message' => 'checkout success',
+            'mhtid' => $mhtid,
+        ];
+        return response()
+        ->json(['statusCode' => 200, 'data' => $data]);
     }
 
     public function partialcheckout(Request $request) {

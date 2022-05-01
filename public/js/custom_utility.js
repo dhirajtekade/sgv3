@@ -142,17 +142,43 @@ $(document).on('keyup','.no_luggage',function(e){
 
     var value = $(this).val();
     if($.trim(value) != '') {
-        //enable print button
-        $("#printButton_"+sr).attr('disabled', false);
+        //check if alternate_no is also filled / or we have alternate_no already
+        var alternate_no = $("#alternate_no_"+sr).val();
+        if(alternate_no.length > 9) {
+            //enable print button
+            $("#printButton_"+sr).attr('disabled', false);
+        }
+    } else {
+        $("#printButton_"+sr).attr('disabled', true);
+    }
+});
+//Enable Print button when luggage entered in token_result list
+$(document).on('keyup','.alternate_no',function(e){
+    var id = $(this).attr('id');
+    var sr = id.split('_')[2];//indesx
+
+    var alternate_no = $(this).val();
+    console.log(alternate_no);
+
+    if(alternate_no.length > 9) {
+        //check if bag is also filled
+        var noluggage = $("#noluggage_"+sr).val();
+        console.log(noluggage);
+
+        if($.trim(noluggage) != '') {
+            //enable print button
+            $("#printButton_"+sr).attr('disabled', false);
+        }
     } else {
         $("#printButton_"+sr).attr('disabled', true);
     }
 });
 
-//Enable Print button when luggage entered in Add new person modal
+//AREA: Add new person Modal. WORK:Enable Print button when luggage entered in Add new person modal
 $(document).on('keyup','#no_luggage',function(e){
     var value = $(this).val();
     if(value != '') {
+        //also check if mobile number is entered
         //enable print button
         $(".addNewPrint").attr('disabled', false);
         $('#no_luggage').removeClass("errorClass");
