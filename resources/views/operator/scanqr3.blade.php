@@ -1,25 +1,11 @@
-<!doctype html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="author" content="ZXing for JS">
-
-    <title>ZXing TypeScript | Demo &amp; Examples</title>
-
-    <link rel="stylesheet" rel="preload" as="style" onload="this.rel='stylesheet';this.onload=null" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
-    <link rel="stylesheet" rel="preload" as="style" onload="this.rel='stylesheet';this.onload=null" href="https://unpkg.com/normalize.css@8.0.0/normalize.css">
-    <link rel="stylesheet" rel="preload" as="style" onload="this.rel='stylesheet';this.onload=null" href="https://unpkg.com/milligram@1.3.0/dist/milligram.min.css">
-</head>
-
-<body>
+@section('content')
 
     <main class="wrapper" style="padding-top:2em">
 
         <section class="container" id="demo-content">
-            <h1 class="title">Scan barcode from Video Camera</h1>
-
+            <h4 class="title">Start camera</h4>
             <div>
                 <a class="button" id="startButton">Start</a>
                 <a class="button" id="resetButton">Reset</a>
@@ -37,6 +23,7 @@
 
             <label>Result:</label>
             <pre><code id="result"></code></pre>
+            <div class="checkout_result"></div>
 
         </section>
 
@@ -44,6 +31,8 @@
     </main>
 
     <script type="text/javascript" src="https://unpkg.com/@zxing/library@latest"></script>
+    <script src="{{ asset('js/scanner.js') }}" defer></script>
+
     <script type="text/javascript">
         window.addEventListener('load', function () {
             let selectedDeviceId;
@@ -73,6 +62,9 @@
                         codeReader.decodeOnceFromVideoDevice(selectedDeviceId, 'video').then((result) => {
                             console.log(result)
                             document.getElementById('result').textContent = result.text
+                            //START CHECKOUT HERE
+                            partialcheckout(scannedcode);
+                            $('#result').val('');
                         }).catch((err) => {
                             console.error(err)
                             document.getElementById('result').textContent = err
@@ -93,7 +85,5 @@
         })
     </script>
 
-</body>
-
-</html>
+@endsection
 
