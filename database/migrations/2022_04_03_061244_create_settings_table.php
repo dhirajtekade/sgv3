@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->enum('qr_code_print', ['double', 'single','no print'])->default('double');
             $table->enum('show_token_number', ['both', 'single'])->default('both');
+            $table->enum('show_bag_number', ['yes', 'no'])->default('yes');
             $table->timestamps();
         });
     }
