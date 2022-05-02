@@ -169,7 +169,7 @@ return [
          */
         Maatwebsite\Excel\ExcelServiceProvider::class,
         \Yajra\DataTables\DataTablesServiceProvider::class,
-        Milon\Barcode\BarcodeServiceProvider::class,
+        // Milon\Barcode\BarcodeServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -198,8 +198,8 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'DataTables' => \Yajra\DataTables\Facades\DataTables::class,
-        'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
-        'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
+        // 'DNS1D' => Milon\Barcode\Facades\DNS1DFacade::class,
+        // 'DNS2D' => Milon\Barcode\Facades\DNS2DFacade::class,
     ])->toArray(),
 
 ];

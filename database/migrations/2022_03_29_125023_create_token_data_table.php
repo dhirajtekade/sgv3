@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('fk_mhtdata_id')->nullable();
             $table->string('fk_event_id')->nullable();
-            $table->string('each_token_no')->nullable();
+            $table->integer('each_token_no')->nullable();//with varchar it will create issue while order by desc, and hence get last token value and set new token number incremented by one
             $table->string('no_luggage')->nullable();
             $table->string('qr_path')->nullable();
             $table->integer('checkout_status')->default(0)->comment('0:checkin, 1:checkout, 2:partial checkout');
