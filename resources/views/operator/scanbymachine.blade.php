@@ -4,7 +4,7 @@
 
 <div class="container">
     <h6>Scan here to checkout</h6>
-    <input type="text" id="scannedcode" class="scannedcode" placeholder="Result of scanning" value="" autofocus="">
+    <input type="text" id="scannedcode" class="scannedcode" placeholder="Scan result" value="" autofocus="">
     <div class="checkout_result"></div>
 </div>
 

@@ -129,9 +129,9 @@ $bagExplode = explode(',', $data['b']);
     <div class="containerbar">
         <img src="{{ asset('images/' . $tokenExplode[$i] . '.png') }}">
         <span>
+            {{ $setttingVars->show_token_number == 'both' ? 'T /:' . $tokenExplode[$i] : '' }}
             {{ $data['s_id'] }}
-            {{ $setttingVars->show_token_number == 'both' ? '/ t:' . $tokenExplode[$i] : '' }}
-            {{ $setttingVars->show_bag_number == 'yes' ? '/ b:' . $bagExplode[$i] : '' }}
+            {{ $setttingVars->show_bag_number == 'yes' ? '/ B:' . $bagExplode[$i] : '' }}
         </span>
 
     </div>
@@ -151,7 +151,7 @@ $bagExplode = explode(',', $data['b']);
             <img src="{{ asset('images/' . $tokenExplode[$i] . '.png') }}">
             <div>
                 {{ $data['s_id'] }}
-                {{ $setttingVars->show_bag_number == 'yes' ? '/ b:' . $bagExplode[$i] : '' }}
+                {{ $setttingVars->show_bag_number == 'yes' ? '/ B:' . $bagExplode[$i] : '' }}
             </div>
         </div>
 
@@ -208,7 +208,7 @@ $bagExplode = explode(',', $data['b']);
     // $('.print-window').click(function() {
     //     window.print();
     // });
-    // window.print();
+    window.print();
     // window.onfocus=function(){ window.close();}
 
     // setTimeout(function () { window.print(); }, 500);

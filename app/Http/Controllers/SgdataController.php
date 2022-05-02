@@ -223,10 +223,18 @@ class SgdataController extends Controller
 
         if ($token_no) {
             //TODO - check if already checked out
+            $isAlreadyDeleted = Tokenmap::where('each_token_no', $token_no)->where('fk_mhtdata_id',$fk_mhtdata_id )->where('fk_event_id', $fk_event_id)->onlyTrashed()->first();
 
-
-            //if not then checkout
-            Tokenmap::where('each_token_no', $token_no)->where('fk_mhtdata_id',$fk_mhtdata_id )->where('fk_event_id', $fk_event_id)->delete();
+            if($isAlreadyDeleted) {
+                $data = [
+                    'message' => 'Already checkout',
+                    'token' => $token_no,
+                ];
+                return response()
+                ->json(['statusCode' => 200, 'data' => $data]);
+            } else {
+                //if not then checkout
+                Tokenmap::where('each_token_no', $token_no)->where('fk_mhtdata_id',$fk_mhtdata_id )->where('fk_event_id', $fk_event_id)->delete();
                 //TODO - pusher notification
                 // PusherFactory::make()->trigger('my-event', 'myevent',['data'=>$data]);
                 // $data['user'] = \Auth::user()->name;
@@ -239,7 +247,7 @@ class SgdataController extends Controller
                 ];
                 return response()
                 ->json(['statusCode' => 200, 'data' => $data]);
-
+            }
         } else {
             return response()->json("no token found",400);
         }
