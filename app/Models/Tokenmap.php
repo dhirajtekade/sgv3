@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Eventdata;
+use Illuminate\Support\Facades\File;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\Eventdata;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 // use DNS1D;
 use Picqer;
 
@@ -99,6 +100,16 @@ class Tokenmap extends Model
 
             // $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
             // file_put_contents('barcode.png', $generator->getBarcode('123456789', $generator::TYPE_CODABAR));
+            //create public/images folder if not exist and give permission
+            // if (!file_exists('path/to/directory')) {
+            //     mkdir('path/to/directory', 0777, true);
+            // }
+            $images_folder = 'images';
+            if(!File::exists($images_folder)) {
+                File::makeDirectory($images_folder, 0777, true, true);
+            }
+            // $path = public_path().'/images';
+            // File::isDirectory($path) or File::makeDirectory($path, 0777, true, true);
 
             $generator = new Picqer\Barcode\BarcodeGeneratorPNG();
             file_put_contents("images/".$thisBagToken.".png", $generator->getBarcode($barcodeValue, $generator::TYPE_CODE_128));
