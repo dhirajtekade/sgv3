@@ -57,6 +57,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::post('/export_excel', [RerportController::class, 'exportIntoExcel'])->name('export_excel');
     Route::post('/export_report', [RerportController::class, 'export_report'])->name('export_report');
 
-
+    //mysql://bb716f920950df:8b0b5fe2@us-cdbr-east-05.cleardb.net/heroku_5a13b254da35c38?reconnect=true
 
 });

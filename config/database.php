@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Str;
 
+$DATABASE_URL=parse_url('mysql://ba5a27db370333:de1bc8e5@us-cdbr-east-05.cleardb.net/heroku_7f4e0a27d9829c6?reconnect=true');
+
 return [
 
     /*
@@ -44,6 +46,25 @@ return [
         ],
 
         'mysql' => [
+            'driver' => 'mysql',
+            'url' => env('DATABASE_URL'),
+            'host' => $DATABASE_URL['host'], //env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '3306'),
+            'database' => ltrim($DATABASE_URL['path'], '/'),// env('DB_DATABASE', 'forge'),
+            'username' => $DATABASE_URL['user'],// env('DB_USERNAME', 'forge'),
+            'password' => $DATABASE_URL['pass'],//env('DB_PASSWORD', ''),
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
+            'options' => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+        ],
+        'mysql_local' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST', '127.0.0.1'),
