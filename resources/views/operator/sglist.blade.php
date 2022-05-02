@@ -8,14 +8,14 @@
         {{-- <div class="col-2">
             <button class="btn btn-warning mr-2" data-toggle="modal" id="openaddNewModal" ><i class="fa fa-solid fa-plus"></i> Add as a Mht</button>
         </div> --}}
+        <div class="col-2">
+            <input type="text" id="search_by_mhtid" class="search_mht_by" placeholder=" Search by Mhtid" value="" autofocus>
+        </div>
         <div class="col-2 mr-2">
             <input type="text" id="search_by_any" class="search_mht_by" placeholder=" Search by Any" value="">
         </div>
         <div class="col-2">
             <input type="text" id="search_by_mobile" class="search_mht_by" placeholder=" Search by Mobile" value="">
-        </div>
-        <div class="col-2">
-            <input type="text" id="search_by_mhtid" class="search_mht_by" placeholder=" Search by Mhtid" value="" autofocus>
         </div>
 
 

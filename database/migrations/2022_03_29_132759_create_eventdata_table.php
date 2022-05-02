@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('event_name')->nullable();
             $table->string('month')->nullable();
             $table->string('year')->nullable();
+            $table->date('event_start_date')->nullable();
+            $table->date('event_end_date')->nullable();
             $table->string('event_location')->nullable();
             $table->timestamps();
         });

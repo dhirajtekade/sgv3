@@ -1,107 +1,138 @@
 
-
-$(document).on("keyup", '.search_mht_by', function(e) {
-    var mobile = $("#search_by_mobile").val();
-    var any = $("#search_by_any").val();
-    var mhtid = $("#search_by_mhtid").val();
-    $(".search_result").show();
-    e.preventDefault();
-    $("#loading").show();
-
-    $.ajax({
-        url:searchResult_Url,
-        type: 'get',
-        dataType: 'json',
-        data: {
-            mhtid: mhtid,
-            mobile:mobile,
-            any:any
-        },
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        },
-        success: function(data) {
-            $("#loading").hide();
-            // console.log(data);
-            //clear previous records
-            $(".search_result_table_tr").remove();
-           // $(".search_result_table_tr").hide();
-            //$(".search_result_table_td_input").hide();
-            //$(".search_result_table_td_span").show();
-            var trhtml = '';
-            if(data != '' && data != -1) {
-                //hide default search tr
-                $(".default_new").hide();
-                //create tr html
-
-                $.each( data, function( key, value ) {
-                    trhtml += '<tr class="search_result_table_tr not_default_search" id="search_result_table_tr_'+value.id+'">';
-                    trhtml += '<td class="search_result_table_td_mhtid">'+value.mht_id+'</td>';
-                    if($.trim(value.name) != ''){
-                        trhtml += '<td class="search_result_table_td_name"><span class="search_result_table_td_span">'+value.name+'</span>';
-                    } else {
-                        trhtml += '<td class="search_result_table_td_name"><span class="search_result_table_td_span"><em>(Click Edit button to update with Mht Name)</em></span>';
-                    }
-                    trhtml += '<span class="search_result_table_td_input"><input value="'+value.name+'" type="text" name="name" class="name  w-75" id="name_'+value.id+'" size="10" placeholder="Full Name"></span></td>';
-                    trhtml += '<td class="search_result_table_td_alternate_no"><span class="search_result_table_td_span">'+value.alternate_no+'</span>';
-                    trhtml += '<span class="search_result_table_td_input"><input value="'+value.alternate_no+'" type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_'+value.id+'" size="10" placeholder="Mobile Number" ></span></td>';
-                    trhtml += '<td><input value="" type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_'+value.id+'" size="5" placeholder="Bags">';
-                    if(value.total_bags > 0){
-                        trhtml += '<span class="mr-2" id="noluggageplus_'+value.id+'"> +'+value.total_bags+'</span>';
-                    }
-
-                    trhtml += '</td>';
-                    // trhtml += '<td><input value="no of luggage if any" type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_0" size="5" placeholder="Bags"></td>';
-                    trhtml += '<td>';
-                    trhtml += '<button class="printButton btn btn-primary btn-sm mr-2" id="printButton_'+value.id+'" disabled>Print</button>';
-                    trhtml += '<a class="checkoutButton btn btn-success btn-sm mr-2" id="checkoutButton_'+value.id+'" disabled>Checkout</a>';
-                    trhtml += '<a class="EditMhtButton btn btn-info btn-sm mr-2" id="EditMhtButton_'+value.id+'">Edit</a>';
-                    trhtml += '</td>';
-                    trhtml += '</tr>';
-                 });
-                $(".search_result_table_tbody").append(trhtml);
-
-            } else if(data != -1) {
-                //show default search tr
-                // alert(66)
-               // $(".default_new").show();
-
-               trhtml += '<tr class="default_new search_result_table_tr" id="search_result_table_tr_0">';
-               trhtml += '<td class="search_result_table_td_mhtid">Mhtdvalue</td>';
-               trhtml += '<td><input type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_0" size="10" placeholder="Mobile Number"></td>';
-               trhtml += '<td><input type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_0" size="5" placeholder="Bags"></td>';
-               trhtml += '<td>';
-               trhtml += '<button class="printButton btn btn-primary btn-sm mr-2" id="printButton_0" disabled>Print</button>';
-               trhtml += '</td>';
-               trhtml += '</tr>';
-
-                $(".search_result_table_tbody").append(trhtml);
-                $(".search_result_table_td_mhtid").html(mhtid);
-
-                //still allow to write number and bag
-            } else { //hide all search tr
-                $(".search_result_table_tr").remove();
-
-            }
-        },
-        error: function(xhr, textStatus, errorThrown){
-            $("#loading").hide();
-            $(".addNewPrint").attr('disabled', false);
-            console.log(xhr);
-            console.log(textStatus);
-            console.log(errorThrown);
-            var message = xhr.responseJSON.message;
-            if(message == 'Unauthenticated.'){
-                alert('User got logged out. You need to login again.');
-                location.reload();
-            } else {
-                alert('Bhogave Eni Bhul! Some error occured. Try Reentering data or Reload the page!');
-            }
-
-         }
+var Timer;
+var search_mht_byId = 'search_by_mhtid';
+function Start() {
+    $('.search_mht_by').keyup(function () {
+        search_mht_byId = $(this).attr('id');
+        clearTimeout(Timer);
+        Timer = setTimeout(SendRequest, 1000);
     });
+}
 
-})
+function SendRequest() {
+    var scannedcode = $("#"+search_mht_byId).val();
+    //search data for entered mhtid
+    if(scannedcode){
+        search_mht_in_db();
+        // $("#search_by_mhtid").val('');
+    } else {
+        var mobile = $("#search_by_mobile").val();
+        var any = $("#search_by_any").val();
+        var mhtid = $("#search_by_mhtid").val();
+
+        if(mobile == '' && any == '' && mhtid == ''){
+            $(".search_result").hide();
+        }
+    }
+}
+$(Start);
+
+
+// $(document).on("keyup", '.search_mht_by', function(e) {
+//     search_mht_in_db()
+// })
+function search_mht_in_db() {
+        var mobile = $("#search_by_mobile").val();
+        var any = $("#search_by_any").val();
+        var mhtid = $("#search_by_mhtid").val();
+        $(".search_result").show();
+        // e.preventDefault();
+        $("#loading").show();
+
+        $.ajax({
+            url:searchResult_Url,
+            type: 'get',
+            dataType: 'json',
+            data: {
+                mhtid: mhtid,
+                mobile:mobile,
+                any:any
+            },
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(data) {
+                $("#loading").hide();
+                // console.log(data);
+                //clear previous records
+                $(".search_result_table_tr").remove();
+               // $(".search_result_table_tr").hide();
+                //$(".search_result_table_td_input").hide();
+                //$(".search_result_table_td_span").show();
+                var trhtml = '';
+                if(data != '' && data != -1) {
+                    //hide default search tr
+                    $(".default_new").hide();
+                    //create tr html
+
+                    $.each( data, function( key, value ) {
+                        trhtml += '<tr class="search_result_table_tr not_default_search" id="search_result_table_tr_'+value.id+'">';
+                        trhtml += '<td class="search_result_table_td_mhtid">'+value.mht_id+'</td>';
+                        if($.trim(value.name) != ''){
+                            trhtml += '<td class="search_result_table_td_name"><span class="search_result_table_td_span">'+value.name+'</span>';
+                        } else {
+                            trhtml += '<td class="search_result_table_td_name"><span class="search_result_table_td_span"><em>(Click Edit button to update with Mht Name)</em></span>';
+                        }
+                        trhtml += '<span class="search_result_table_td_input"><input value="'+value.name+'" type="text" name="name" class="name  w-75" id="name_'+value.id+'" size="10" placeholder="Full Name"></span></td>';
+                        trhtml += '<td class="search_result_table_td_alternate_no"><span class="search_result_table_td_span">'+value.alternate_no+'</span>';
+                        trhtml += '<span class="search_result_table_td_input"><input value="'+value.alternate_no+'" type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_'+value.id+'" size="10" placeholder="Mobile Number" ></span></td>';
+                        trhtml += '<td><input value="" type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_'+value.id+'" size="5" placeholder="Bags">';
+                        if(value.total_bags > 0){
+                            trhtml += '<span class="mr-2" id="noluggageplus_'+value.id+'"> +'+value.total_bags+'</span>';
+                        }
+
+                        trhtml += '</td>';
+                        // trhtml += '<td><input value="no of luggage if any" type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_0" size="5" placeholder="Bags"></td>';
+                        trhtml += '<td>';
+                        trhtml += '<button class="printButton btn btn-primary btn-sm mr-2" id="printButton_'+value.id+'" disabled>Print</button>';
+                        trhtml += '<a class="checkoutButton btn btn-success btn-sm mr-2" id="checkoutButton_'+value.id+'" disabled>Checkout</a>';
+                        trhtml += '<a class="EditMhtButton btn btn-info btn-sm mr-2" id="EditMhtButton_'+value.id+'">Edit</a>';
+                        trhtml += '</td>';
+                        trhtml += '</tr>';
+                     });
+                    $(".search_result_table_tbody").append(trhtml);
+
+                } else if(data != -1) {
+                    //show default search tr
+                    // alert(66)
+                   // $(".default_new").show();
+
+                   trhtml += '<tr class="default_new search_result_table_tr" id="search_result_table_tr_0">';
+                   trhtml += '<td class="search_result_table_td_mhtid">Mhtdvalue</td>';
+                   trhtml += '<td><input type="text" name="alternate_no" class="alternate_no numericCheck w-75" id="alternate_no_0" size="10" placeholder="Mobile Number"></td>';
+                   trhtml += '<td><input type="text" name="no_luggage" class="no_luggage numericCheck" id="noluggage_0" size="5" placeholder="Bags"></td>';
+                   trhtml += '<td>';
+                   trhtml += '<button class="printButton btn btn-primary btn-sm mr-2" id="printButton_0" disabled>Print</button>';
+                   trhtml += '</td>';
+                   trhtml += '</tr>';
+
+                    $(".search_result_table_tbody").append(trhtml);
+                    $(".search_result_table_td_mhtid").html(mhtid);
+
+                    //still allow to write number and bag
+                } else { //hide all search tr
+                    $(".search_result_table_tr").remove();
+
+                }
+            },
+            error: function(xhr, textStatus, errorThrown){
+                $("#loading").hide();
+                $(".addNewPrint").attr('disabled', false);
+                console.log(xhr);
+                console.log(textStatus);
+                console.log(errorThrown);
+                var message = xhr.responseJSON.message;
+                if(message == 'Unauthenticated.'){
+                    alert('User got logged out. You need to login again.');
+                    location.reload();
+                } else {
+                    alert('Bhogave Eni Bhul! Some error occured. Try Reentering data or Reload the page!');
+                }
+
+             }
+        });
+}
+
 
 //adding new mht not having mht id yet
 $(document).on("click",".addNewPrint",function(e) {

@@ -90,3 +90,6 @@
 .import_format {
     font-size: xx-small;
 }
+.btn-primary.disabled, .btn-primary:disabled {
+    background-color: #bcc5d3;
+}

@@ -31,13 +31,14 @@
                             </li>
                         @endif --}}
                     @else
-
+                        @if (Request::is('/') || Request::is('home'))
                         <li class="nav-item">
                             <div class="form-check form-switch nav-link">
                                 <input class="form-check-input" type="checkbox" id="displayTodayRecord">
                                 <label class="form-check-label" for="displayTodayRecord">Today's Record Display</label>
                             </div>
                         </li>
+                        @endif
                         <li class="nav-item">
                             <a href="javascript:void(0)" id="openaddNewModal" class="nav-link scanqr"> <i class="fa-solid fa-qrcode"></i>Add as a Mht</a>
                         </li>
